@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'codepage.dart'; // Import the CodePage widget from codepage.dart
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Color.fromARGB(255, 91, 139, 243),
@@ -18,6 +20,8 @@ class MyApp extends StatelessWidget {
   }
 }
 class AppPage extends StatefulWidget{
+  const AppPage({super.key});
+
   @override
   _AppPageState createState() =>_AppPageState();
 }
@@ -58,20 +62,22 @@ class _AppPageState extends State<AppPage> {
           bottom: 410,
           child: TextButton(
             style: ButtonStyle(
-              minimumSize: MaterialStateProperty.all<Size>(Size(200, 36)),
+              minimumSize: MaterialStateProperty.all<Size>(const Size(200, 36)),
               backgroundColor: MaterialStateProperty.all<Color>(
-                Color.fromARGB(255, 255, 193, 59),
+                const Color.fromARGB(255, 255, 193, 59),
               ),
               foregroundColor: MaterialStateProperty.all<Color>(
-                Color.fromARGB(255, 255, 255, 255),
+                const Color.fromARGB(255, 255, 255, 255),
               ),
               overlayColor: MaterialStateProperty.resolveWith<Color?>(
                 (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.hovered))
-                    return Color.fromARGB(255, 255, 255, 255);
+                  if (states.contains(MaterialState.hovered)) {
+                    return const Color.fromARGB(255, 255, 255, 255);
+                  }
                   if (states.contains(MaterialState.focused) ||
-                      states.contains(MaterialState.pressed))
-                    return Color.fromARGB(255, 255, 255, 255);
+                      states.contains(MaterialState.pressed)) {
+                    return const Color.fromARGB(255, 255, 255, 255);
+                  }
                   return null;
                 },
               ),
@@ -80,11 +86,11 @@ class _AppPageState extends State<AppPage> {
                 Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CodePage(),
+                  builder: (context) => const CodePage(),
                 ),
               );
             },
-            child: Text(
+            child: const Text(
               'Start Coding',
               style: TextStyle(
                 fontSize: 19.0,

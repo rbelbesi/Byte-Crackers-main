@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
-
+import 'Step-By-Step.dart';
+import 'Complete-Run.dart';
 class CodePage extends StatelessWidget {
+  const CodePage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Color.fromARGB(255, 91, 139, 243),
@@ -15,6 +18,8 @@ class CodePage extends StatelessWidget {
 }
 
 class AppPage extends StatefulWidget {
+  const AppPage({super.key});
+
   @override
   _AppPageState createState() => _AppPageState();
 }
@@ -23,7 +28,6 @@ class _AppPageState extends State<AppPage> {
   String enteredText = '';
   void handleButtonPress() {
     List<String> lines = enteredText.split('\n');
-
     RegExp pattern =
         RegExp(r'^(add|sub|and|slt|sll) \$t[0-7], \$t[0-7], \$t[0-7]$');
     bool allLinesFollowFormat = true;
@@ -45,19 +49,32 @@ class _AppPageState extends State<AppPage> {
         type: QuickAlertType.confirm,
         confirmBtnText: 'Step-By_Step',
         onConfirmBtnTap: () {
-          print('Assemble button tapped');
+        
+         Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const StepByStep(),
+                ),
+              );
+              
         },
-        confirmBtnTextStyle: TextStyle(
+        confirmBtnTextStyle: const TextStyle(
           fontSize: 14,
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
-        confirmBtnColor: Color.fromARGB(255, 91, 139, 243),
+        confirmBtnColor: const Color.fromARGB(255, 91, 139, 243),
         cancelBtnText: 'Complete', // Second button text
         onCancelBtnTap: () {
-          print('Cancel button tapped');
+         Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CompleteRun(),
+                ),
+              );
+              
         },
-        cancelBtnTextStyle: TextStyle(
+        cancelBtnTextStyle: const TextStyle(
           fontSize: 14,
           color: Color.fromARGB(255, 91, 139, 243),
           fontWeight: FontWeight.bold,
@@ -70,7 +87,7 @@ class _AppPageState extends State<AppPage> {
         text: 'Make sure that your code\nfollow the rules.',
         type: QuickAlertType.error,
         confirmBtnText: 'Back To Editor',
-        confirmBtnTextStyle: TextStyle(
+        confirmBtnTextStyle: const TextStyle(
           fontSize: 13,
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -105,11 +122,11 @@ class _AppPageState extends State<AppPage> {
           ),
           Align(
             alignment: Alignment.center,
-            child: Container(
+            child: SizedBox(
               width: 300,
               child: TextField(
                 maxLines: null,
-                style: TextStyle(),
+                style: const TextStyle(),
                 onChanged: (text) {
                   setState(() {
                     enteredText = text;
@@ -117,15 +134,15 @@ class _AppPageState extends State<AppPage> {
                 },
                 decoration: InputDecoration(
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide:
-                        BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
+                        const BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.white),
+                    borderSide: const BorderSide(color: Colors.white),
                   ),
                   hintText: 'write your code...',
                   fillColor: Colors.white,
@@ -142,20 +159,22 @@ class _AppPageState extends State<AppPage> {
               alignment: Alignment.bottomCenter,
               child: TextButton(
                 style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all<Size>(Size(200, 36)),
+                  minimumSize: MaterialStateProperty.all<Size>(const Size(200, 36)),
                   backgroundColor: MaterialStateProperty.all<Color>(
-                    Color.fromARGB(255, 255, 193, 59),
+                    const Color.fromARGB(255, 255, 193, 59),
                   ),
                   foregroundColor: MaterialStateProperty.all<Color>(
-                    Color.fromARGB(255, 255, 255, 255),
+                    const Color.fromARGB(255, 255, 255, 255),
                   ),
                   overlayColor: MaterialStateProperty.resolveWith<Color?>(
                     (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.hovered))
-                        return Color.fromARGB(255, 255, 255, 255);
+                      if (states.contains(MaterialState.hovered)) {
+                        return const Color.fromARGB(255, 255, 255, 255);
+                      }
                       if (states.contains(MaterialState.focused) ||
-                          states.contains(MaterialState.pressed))
-                        return Color.fromARGB(255, 255, 255, 255);
+                          states.contains(MaterialState.pressed)) {
+                        return const Color.fromARGB(255, 255, 255, 255);
+                      }
                       return null;
                     },
                   ),
@@ -163,7 +182,7 @@ class _AppPageState extends State<AppPage> {
                 onPressed: () {
                   handleButtonPress();
                 },
-                child: Text(
+                child: const Text(
                   'Assemble',
                   style: TextStyle(
                     fontSize: 19.0,
