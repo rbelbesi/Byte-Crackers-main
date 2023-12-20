@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'codepage.dart'; // Import the CodePage widget from codepage.dart
 
 void main() {
   runApp(MyApp());
@@ -12,12 +13,15 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Color.fromARGB(255, 91, 139, 243),
         body: AppPage(),
-      ),
+      ), 
     );
   }
 }
-
-class AppPage extends StatelessWidget {
+class AppPage extends StatefulWidget{
+  @override
+  _AppPageState createState() =>_AppPageState();
+}
+class _AppPageState extends State<AppPage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -72,7 +76,14 @@ class AppPage extends StatelessWidget {
                 },
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CodePage(),
+                ),
+              );
+            },
             child: Text(
               'Start Coding',
               style: TextStyle(
