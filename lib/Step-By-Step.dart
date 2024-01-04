@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'Registers.dart';
 import 'codepage.dart';
 
-
 void main() {
   runApp(StepByStep(
     lines: [],
@@ -66,8 +65,8 @@ class Instruction {
 
 class _MIPSArchitectureState extends State<MIPSArchitecture> {
   Instruction Decode(String instr) {
-    RegExp pattern =
-        RegExp(r'^(add|sub|and|slt|sll)\s*(\$t[0-7]),\s*(\$t[0-7]),\s*(\$t[0-7])$');
+    RegExp pattern = RegExp(
+        r'^(add|sub|and|slt|sll)\s*(\$t[0-7]),\s*(\$t[0-7]),\s*(\$t[0-7])$');
     Iterable<RegExpMatch> matches = pattern.allMatches(instr);
 
     String instruction = '';
@@ -107,20 +106,24 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
     print('src2index: $src2index');
 
     if (inst.GetInstructionName() == 'add') {
-      widget.Registers[distindex] = widget.Registers[src1index] + widget.Registers[src2index];
+      widget.Registers[distindex] =
+          widget.Registers[src1index] + widget.Registers[src2index];
     }
     if (inst.GetInstructionName() == 'sub') {
-      widget.Registers[distindex] = widget.Registers[src1index] - widget.Registers[src2index];
+      widget.Registers[distindex] =
+          widget.Registers[src1index] - widget.Registers[src2index];
     }
     if (inst.GetInstructionName() == 'and') {
-      widget.Registers[distindex] = widget.Registers[src1index] & widget.Registers[src2index];
+      widget.Registers[distindex] =
+          widget.Registers[src1index] & widget.Registers[src2index];
     }
     if (inst.GetInstructionName() == 'slt') {
       widget.Registers[distindex] =
           widget.Registers[src1index] < widget.Registers[src2index] ? 1 : 0;
     }
     if (inst.GetInstructionName() == 'sll') {
-      widget.Registers[distindex] = widget.Registers[src1index] << widget.Registers[src2index];
+      widget.Registers[distindex] =
+          widget.Registers[src1index] << widget.Registers[src2index];
     }
     setState(() {
       print('UI updated');
@@ -138,114 +141,257 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
     }
     print('Run completed.');
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      SafeArea(
+      body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-            alignment: Alignment.center,
-            width: 400,
-            height: 100,
-              color:Color.fromARGB(255, 91, 139, 243),
-            child: Row(
-              
-               children:[
-                 SizedBox(width: 15,height: 70,),
-                    Container(
-            alignment: Alignment.center,
-            width: 70,
-            height: 70,
-              color:Color.fromARGB(255, 255, 255, 255),
-            ),
-                 SizedBox(width: 15,height: 70,),
-                Container(
-            alignment: Alignment.center,
-            width: 35,
-            height: 70,
-              color:Color.fromARGB(255, 255, 255, 255),
-            ),
-            SizedBox(width: 15,height: 70,),
-            Container(
-            alignment: Alignment.center,
-            width: 70,
-            height: 70,
-              color:Color.fromARGB(255, 255, 255, 255),
-            ),
-            SizedBox(width: 15,height: 70,),
-            Container(
-            alignment: Alignment.center,
-            width: 100,
-            height: 35,
-              color:Color.fromARGB(255, 255, 255, 255),
-            ),
-               ]
-            ),
-            ),
-              Container(
-            alignment: Alignment.center,
-            width: 400,
-            height: 20,
-              color:Color.fromARGB(255, 255, 255, 255),
-            ),
-            Container(
-            alignment: Alignment.center,
-            width: 400,
-            height: 100,
-              color:Color.fromARGB(255, 91, 139, 243),
-            ),
-              Container(
-            alignment: Alignment.center,
-            width: 400,
-            height: 20,
-              color:Color.fromARGB(255, 255, 255, 255),
-            ),
-            Container(
-            alignment: Alignment.center,
-            width: 400,
-            height: 100,
-              color:Color.fromARGB(255, 91, 139, 243),
-            ),
-              Container(
-            alignment: Alignment.center,
-            width: 400,
-            height: 20,
-              color:Color.fromARGB(255, 255, 255, 255),
-            ),
-            Container(
-            alignment: Alignment.center,
-            width: 400,
-            height: 100,
-              color:Color.fromARGB(255, 91, 139, 243),
-            ),
-              Container(
-            alignment: Alignment.center,
-            width: 400,
-            height: 20,
-              color:Color.fromARGB(255, 255, 255, 255),
-            ),
-            Container(
-            alignment: Alignment.center,
-            width: 400,
-            height: 100,
-              color:Color.fromARGB(255, 91, 139, 243),
-            ),
-                Wrap(
-                spacing: 8.0,
-                runSpacing: 8.0,
-                children: List.generate(widget.Registers.length, (index) {
-                  final registerValue = widget.Registers[index];
-                  final registerName = '\$t$index';
-                  return RegisterBox(
-                    registerName: registerName,
-                    registerValue: registerValue,
-                  );
-                }),
+              alignment: Alignment.center,
+              width: 350,
+              height: 80,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3),
+                  ),
+                ],
               ),
-            
+              child: Row(children: [
+                SizedBox(
+                  width: 15,
+                  height: 70,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: 70,
+                  height: 70,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                ),
+                SizedBox(
+                  width: 15,
+                  height: 70,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: 35,
+                  height: 70,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                ),
+                SizedBox(
+                  width: 15,
+                  height: 70,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: 70,
+                  height: 70,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                ),
+                SizedBox(
+                  width: 15,
+                  height: 70,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: 100,
+                  height: 35,
+                  color: Color.fromARGB(255, 255, 255, 255),
+                ),
+              ]),
+            ),
+            SizedBox(
+              width: 400,
+              height: 20,
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: 350,
+              height: 80,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 400,
+              height: 20,
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: 350,
+              height: 80,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 400,
+              height: 20,
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: 350,
+              height: 80,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 400,
+              height: 20,
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: 350,
+              height: 80,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 400,
+              height: 5,
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: 350,
+              height: 80,
+              child: Row(children: [
+                SizedBox(
+                  width: 30,
+                ),
+                for (int i = 0; i < 4; i++)
+                  Container(
+                    alignment: Alignment.center,
+                    width: 72.5,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '\$t$i',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 91, 139, 243),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 4.0),
+                        Text(
+                          '${widget.Registers[i]}',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 91, 139, 243),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ]),
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: 350,
+              height: 65,
+              child: Row(children: [
+                SizedBox(
+                  width: 30,
+                ),
+                for (int i = 4; i < 8; i++)
+                  Container(
+                    alignment: Alignment.center,
+                    width: 72.5,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '\$t$i',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 91, 139, 243),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 4.0),
+                        Text(
+                          '${widget.Registers[i]}',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 91, 139, 243),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ]),
+            ),
           ],
         ),
       ),
