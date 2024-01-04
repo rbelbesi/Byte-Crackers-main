@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:quickalert/quickalert.dart';
+import 'package:mips/Registers.dart';
 import 'Step-By-Step.dart';
 import 'Complete-Run.dart';
 class CodePage extends StatelessWidget {
-  const CodePage({super.key});
+  final List<int> Registers;
+  const CodePage({Key? key, required this.Registers}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,82 +20,139 @@ class CodePage extends StatelessWidget {
 
 class AppPage extends StatefulWidget {
   const AppPage({super.key});
-
   @override
   _AppPageState createState() => _AppPageState();
 }
-
-class _AppPageState extends State<AppPage> {
   String enteredText = '';
-  void handleButtonPress() {
-    List<String> lines = enteredText.split('\n');
-    RegExp pattern =
-        RegExp(r'^(add|sub|and|slt|sll) \$t[0-7], \$t[0-7], \$t[0-7]$');
-    bool allLinesFollowFormat = true;
-    // Iterate through each line
-    for (String line in lines) {
-      // Check if the line matches the desired format
-      if (!pattern.hasMatch(line)) {
-        allLinesFollowFormat = false;
-        break; // No need to continue checking if one line does not follow the format
-      }
-    }
+  List<String> lines=[];
+class _AppPageState extends State<AppPage> {
 
-    // Show an alert based on the result
-    if (allLinesFollowFormat) {
-      QuickAlert.show(
-        context: context,
-        title: 'Assemble Succeed',
-        text: 'Choose Run-Option',
-        type: QuickAlertType.confirm,
-        confirmBtnText: 'Step-By_Step',
-        onConfirmBtnTap: () {
-        
-         Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const StepByStep(),
-                ),
-              );
-              
-        },
-        confirmBtnTextStyle: const TextStyle(
-          fontSize: 14,
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-        confirmBtnColor: const Color.fromARGB(255, 91, 139, 243),
-        cancelBtnText: 'Complete', // Second button text
-        onCancelBtnTap: () {
-         Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CompleteRun(),
-                ),
-              );
-              
-        },
-        cancelBtnTextStyle: const TextStyle(
-          fontSize: 14,
-          color: Color.fromARGB(255, 91, 139, 243),
-          fontWeight: FontWeight.bold,
-        ),
-      );
-    } else {
-      QuickAlert.show(
-        context: context,
-        title: 'Error',
-        text: 'Make sure that your code\nfollow the rules.',
-        type: QuickAlertType.error,
-        confirmBtnText: 'Back To Editor',
-        confirmBtnTextStyle: const TextStyle(
-          fontSize: 13,
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      );
+void handleButtonPress() {
+  lines = enteredText.split('\n');
+  RegExp pattern =
+     RegExp(r'^(add|sub|and|slt|sll)\s*\$t[0-7],\s*\$t[0-7],\s*\$t[0-7]$');
+  bool allLinesFollowFormat = true;
+
+  for (String line in lines) {
+    if (!pattern.hasMatch(line)) {
+      allLinesFollowFormat = false;
+      break;
     }
   }
+
+  if (allLinesFollowFormat) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Assemble Succeed',
+            style: TextStyle(
+              color: Color.fromARGB(255, 11, 185, 5),
+              fontSize: 23.0,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          content: const Text(
+            'Choose Run-Option',
+            style: TextStyle(
+              color: Color.fromARGB(255, 161, 160, 160),
+              fontSize: 15.0,
+              fontWeight: FontWeight.normal,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StepByStep(lines: lines, Registers: Registers),// Pass your Registers list here if needed
+                  
+                ),
+                );
+              },
+              child: const Text(
+                'Step-By-Step',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 139, 243),
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.normal,
+                ),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CompleteRun(lines: lines, Registers: Registers),
+                    
+                  ),
+                );
+              },
+              child: const Text(
+                'Complete',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 139, 243),
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.normal,
+                ),
+                textAlign: TextAlign.right,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  } else {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Error',
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          content: const Text(
+            'Make sure that your code\nfollow the rules.',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              fontWeight: FontWeight.normal,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text(
+                'Back To Editor',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +171,7 @@ class _AppPageState extends State<AppPage> {
           Positioned(
             bottom: 300,
             left: 40,
-            child: Image.asset(
+            child:Image.asset(
               'images/image-5.png',
               width: MediaQuery.of(context).size.width * 0.25,
               height: MediaQuery.of(context).size.height * 0.25,

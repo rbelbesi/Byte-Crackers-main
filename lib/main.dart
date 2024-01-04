@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'codepage.dart'; // Import the CodePage widget from codepage.dart
+import 'Registers.dart'; // Import the CodePage widget from codepage.dart
 
 void main() {
   runApp(const MyApp());
@@ -86,7 +86,7 @@ class _AppPageState extends State<AppPage> {
                 Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CodePage(),
+                  builder: (context) => const Register(),
                 ),
               );
             },

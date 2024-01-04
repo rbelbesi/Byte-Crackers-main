@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 class CompleteRun extends StatelessWidget {
-  const CompleteRun({super.key});
-
+  final List<String> lines;
+  final List<int> Registers;
+  const CompleteRun({Key? key, required this.lines, required this.Registers})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
