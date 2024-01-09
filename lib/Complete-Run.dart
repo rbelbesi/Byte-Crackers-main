@@ -64,152 +64,146 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor: const Color.fromARGB(255, 91, 139, 243),
-
+      backgroundColor: const Color.fromARGB(255, 91, 139, 243),
       body: SafeArea(
-        child: 
-        Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                 child: const Row(
-                  children: [
-                     SizedBox(height: 160),]
-                     ),
-              ),
-              Container(
-                alignment: Alignment.center,
-               width:265,
-                height: 80,
-                child: const Row(
-                  children: [
-                     SizedBox(height: 30),
-                     Text(
-                              'Complete Run',
-                            //  textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 40,
-                              ),
-                            ),
-                  ]
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              child: Row(children: [
+                const SizedBox(height: 160),
+              ]),
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: 265,
+              height: 80,
+              child: Row(children: [
+                const SizedBox(height: 30),
+                Text(
+                  'Complete Run',
+                  //  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                  ),
                 ),
-              ),
-              Container(
-                alignment: Alignment.center,
-                width: 350,
-                height: 80,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 30),
-                    for (int i = 0; i <4; i++)
-                      Container(
-                        alignment: Alignment.center,
-                        width: 72.5,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '\$t$i',
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 91, 139, 243),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              '${widget.Registers[i]}',
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 91, 139, 243),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+              ]),
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: 350,
+              height: 80,
+              child: Row(
+                children: [
+                  const SizedBox(width: 30),
+                  for (int i = 0; i < 4; i++)
+                    Container(
+                      alignment: Alignment.center,
+                      width: 72.5,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                       ),
-                  ],
-                ),
-              ),
-            
-              const SizedBox(
-                width: 400,
-                height: 5,
-              ),
-              Container(
-                alignment: Alignment.center,
-                width: 350,
-                height: 80,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 30),
-                    for (int i = 4; i <8; i++)
-                      Container(
-                        alignment: Alignment.center,
-                        width: 72.5,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '\$t$i',
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 91, 139, 243),
+                              fontWeight: FontWeight.bold,
                             ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '\$t$i',
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 91, 139, 243),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
+                          ),
+                          const SizedBox(height: 4.0),
+                          Text(
+                            '${widget.Registers[i]}',
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 91, 139, 243),
+                              fontWeight: FontWeight.bold,
                             ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              '${widget.Registers[i]}',
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 91, 139, 243),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
-            ],
-          ),
-        
+            ),
+            const SizedBox(
+              width: 400,
+              height: 5,
+            ),
+            Container(
+              alignment: Alignment.center,
+              width: 350,
+              height: 80,
+              child: Row(
+                children: [
+                  const SizedBox(width: 30),
+                  for (int i = 4; i < 8; i++)
+                    Container(
+                      alignment: Alignment.center,
+                      width: 72.5,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '\$t$i',
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 91, 139, 243),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const SizedBox(height: 4.0),
+                          Text(
+                            '${widget.Registers[i]}',
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 91, 139, 243),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton:
-      Row(crossAxisAlignment: CrossAxisAlignment.center,
-        children:[
-          const SizedBox(width: 185,), 
-          FloatingActionButton(
-            splashColor: Colors.white,
-          backgroundColor: const Color.fromARGB(255, 255, 193, 59),
+          Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        SizedBox(
+          width: 185,
+        ),
+        FloatingActionButton(
+          splashColor: Colors.white,
+          backgroundColor: Color.fromARGB(255, 255, 193, 59),
           onPressed: () {
             try {
               run();
@@ -217,16 +211,16 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
               print('Error: $e');
             }
           },
-          child: const Icon(
+          child: Icon(
             Icons.play_arrow,
-            color:Colors.white,
+            color: Colors.white,
             size: 30,
-            
           ),
         ),
-        const SizedBox(height: 350,),
-        ]
-      ),
+        SizedBox(
+          height: 350,
+        ),
+      ]),
     );
   }
 
@@ -241,8 +235,6 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
     }
     print('Run completed.');
   }
-  
-
 
   Instruction decode(String instr) {
     RegExp pattern = RegExp(
@@ -263,6 +255,7 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
 
     return Instruction(instruction, operand1, operand2, operand3);
   }
+
   void ExcuteWriteBack(Instruction inst) {
     int distindex = 0;
     int src1index = 0;
@@ -308,12 +301,13 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
       print('UI updated');
     });
   }
+
   int getRegisterIndex(String registerName) {
-  for (int i = 0; i < 8; i++) {
-    if ("\$t$i" == registerName) {
-      return i;
+    for (int i = 0; i < 8; i++) {
+      if ("\$t$i" == registerName) {
+        return i;
+      }
     }
+    return 0; // Default return, handle appropriately based on your requirements
   }
-  return 0; // Default return, handle appropriately based on your requirements
-}
 }
