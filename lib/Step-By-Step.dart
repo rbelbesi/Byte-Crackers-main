@@ -15,7 +15,7 @@ class StepByStep extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Color.fromARGB(255, 91, 139, 243),
+       
         body: MIPSArchitecture(lines: lines, Registers: Registers),
       ),
     );
@@ -68,16 +68,37 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       backgroundColor: const Color.fromARGB(255, 91, 139, 243),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+       
+              Container(
+                alignment: Alignment.center,
+               width:265,
+                height: 80,
+                child: const Row(
+                  children: [
+                     SizedBox(width:17),
+                     Text(
+                              'Step By Step',
+                            //  textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 40,
+                              ),
+                            ),
+                  ]
+                ),
+              ),
               for (int stage = 0; stage < 5; stage++)
                 Container(
                   alignment: Alignment.center,
                   width: 350,
-                  height: 80,
+                  height: 65,
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 255, 255, 255),
@@ -87,7 +108,7 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
                         color: Colors.black.withOpacity(0.05),
                         spreadRadius: 5,
                         blurRadius: 7,
-                        offset: Offset(0, 3),
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
@@ -95,12 +116,13 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
                     children: [
                       Container(
                         alignment: Alignment.center,
-                        height: 20,
+                        height: 25,
                         child: Text(
                           getStageName(stage),
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Color.fromARGB(255, 91, 139, 243),
                             fontWeight: FontWeight.bold,
+                            fontSize: 20,
                           ),
                         ),
                       ),
@@ -116,7 +138,7 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
                 height: 80,
                 child: Row(
                   children: [
-                    SizedBox(width: 30),
+                    const SizedBox(width: 30),
                     for (int i = 0; i <4; i++)
                       Container(
                         alignment: Alignment.center,
@@ -130,7 +152,7 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
                               color: Colors.black.withOpacity(0.05),
                               spreadRadius: 5,
                               blurRadius: 7,
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
@@ -139,17 +161,19 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
                           children: [
                             Text(
                               '\$t$i',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color.fromARGB(255, 91, 139, 243),
                                 fontWeight: FontWeight.bold,
+                                fontSize: 15,
                               ),
                             ),
-                            SizedBox(height: 4.0),
+                            const SizedBox(height: 4.0),
                             Text(
                               '${widget.Registers[i]}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color.fromARGB(255, 91, 139, 243),
                                 fontWeight: FontWeight.bold,
+                                fontSize: 15,
                               ),
                             ),
                           ],
@@ -159,17 +183,17 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
                 ),
               ),
             
-              SizedBox(
+              const SizedBox(
                 width: 400,
                 height: 5,
               ),
               Container(
                 alignment: Alignment.center,
                 width: 350,
-                height: 80,
+                height: 60,
                 child: Row(
                   children: [
-                    SizedBox(width: 30),
+                    const SizedBox(width: 30),
                     for (int i = 4; i <8; i++)
                       Container(
                         alignment: Alignment.center,
@@ -183,7 +207,7 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
                               color: Colors.black.withOpacity(0.05),
                               spreadRadius: 5,
                               blurRadius: 7,
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
@@ -192,17 +216,19 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
                           children: [
                             Text(
                               '\$t$i',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color.fromARGB(255, 91, 139, 243),
                                 fontWeight: FontWeight.bold,
+                                fontSize: 15,
                               ),
                             ),
-                            SizedBox(height: 4.0),
+                            const SizedBox(height: 4.0),
                             Text(
                               '${widget.Registers[i]}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color.fromARGB(255, 91, 139, 243),
                                 fontWeight: FontWeight.bold,
+                                fontSize: 15,
                               ),
                             ),
                           ],
@@ -215,15 +241,30 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          try {
-            run();
-          } catch (e) {
-            print('Error: $e');
-          }
-        },
-        child: const Icon(Icons.play_arrow),
+      floatingActionButton:
+      Row(crossAxisAlignment: CrossAxisAlignment.center,
+        children:[
+          const SizedBox(width: 185,), 
+          FloatingActionButton(
+            splashColor: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 255, 193, 59),
+          onPressed: () {
+            try {
+              run();
+            } catch (e) {
+              print('Error: $e');
+            }
+          },
+          child: const Icon(
+            Icons.play_arrow,
+            color:Colors.white,
+            size: 30,
+            
+          ),
+        ),
+        const SizedBox(height: 110,
+        ),
+        ]
       ),
     );
   }
@@ -266,7 +307,7 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
     if (pipelineIndices[stage] != -1  && pipelineIndices[stage]< widget.lines.length) {
       String currentInstruction='';
     
-       currentInstruction = widget.lines[pipelineIndices[stage]];
+      currentInstruction = widget.lines[pipelineIndices[stage]];
       print(pipelineIndices[stage]);
       Instruction inst = decode(currentInstruction);
 
@@ -275,25 +316,28 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 50,
+              const SizedBox(
+                height: 30,
+                width: 20,
               ),
               
               Text(
-                'PC= ${pipelineIndices[stage]}',
-                style: TextStyle(
+                'PC= ${pipelineIndices[stage]}    ,',
+                style: const TextStyle(
                   color: Color.fromARGB(255, 91, 139, 243),
-                  fontWeight: FontWeight.bold,
+                
+                  fontSize: 17,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               Text(
                 'inst: $currentInstruction',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Color.fromARGB(255, 91, 139, 243),
                   fontWeight: FontWeight.bold,
+                   fontSize: 16,
                 ),
               ),
             ],
@@ -303,32 +347,40 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(
+                height: 30,
+                
+              ),
               Text(
-                'OP: ${inst.GetInstructionName()}',
-                style: TextStyle(
+                'OP: ${inst.GetInstructionName()}   ,',
+                style: const TextStyle(
                   color: Color.fromARGB(255, 91, 139, 243),
                   fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
               ),
               Text(
-                'Dist: ${inst.GetDist()}',
-                style: TextStyle(
+                'Dist: ${inst.GetDist()}   ,',
+                style: const TextStyle(
                   color: Color.fromARGB(255, 91, 139, 243),
                   fontWeight: FontWeight.bold,
+                fontSize: 16,
                 ),
               ),
               Text(
-                'src1: ${inst.GetSrc1()}',
-                style: TextStyle(
+                'src1: ${inst.GetSrc1()}   ,',
+                style: const TextStyle(
                   color: Color.fromARGB(255, 91, 139, 243),
                   fontWeight: FontWeight.bold,
+                fontSize: 16,
                 ),
               ),
               Text(
                 'src2: ${inst.GetSrc2()}',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Color.fromARGB(255, 91, 139, 243),
                   fontWeight: FontWeight.bold,
+                fontSize: 16,
                 ),
               ),
             ],
@@ -338,25 +390,34 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+               const SizedBox(
+                height: 8,
+                
+              ),
               Text(
-                '${inst.GetDist()} = ${inst.GetSrc1()} ${inst.GetInstructionName()} ${inst.GetSrc2()} ',
-                style: TextStyle(
+                '  ${inst.GetDist()} = ${inst.GetSrc1()} ${inst.GetInstructionName()} ${inst.GetSrc2()} ',
+                style: const TextStyle(
                   color: Color.fromARGB(255, 91, 139, 243),
                   fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
               ),
             ],
           );
          
         case 3:
-          return Column(
+          return const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+                SizedBox(
+                height: 8,
+              ),
               Text(
-                'No Need To Access',
+                '  No Need To Access',
                 style: TextStyle(
                   color: Color.fromARGB(255, 91, 139, 243),
                   fontWeight: FontWeight.bold,
+                    fontSize: 16,
                 ),
               ),
             ],
@@ -364,13 +425,18 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
          
         case 4:
           return Column(
+            
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(
+                height: 8,
+              ),
               Text(
                 '${inst.GetDist()} = ${widget.Registers[getRegisterIndex(inst.GetDist())]}',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Color.fromARGB(255, 91, 139, 243),
                   fontWeight: FontWeight.bold,
+                   fontSize: 16,
                 ),
               ),
             ],
@@ -411,13 +477,13 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
     int src2index = 0;
 
     for (int i = 0; i < 8; i++) {
-      if ("\$t${i}" == inst.GetDist()) {
+      if ("\$t$i" == inst.GetDist()) {
         distindex = i;
       }
-      if ("\$t${i}" == inst.GetSrc1()) {
+      if ("\$t$i" == inst.GetSrc1()) {
         src1index = i;
       }
-      if ("\$t${i}" == inst.GetSrc2()) {
+      if ("\$t$i" == inst.GetSrc2()) {
         src2index = i;
       }
     }
@@ -452,7 +518,7 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
   }
   int getRegisterIndex(String registerName) {
   for (int i = 0; i < 8; i++) {
-    if ("\$t${i}" == registerName) {
+    if ("\$t$i" == registerName) {
       return i;
     }
   }
