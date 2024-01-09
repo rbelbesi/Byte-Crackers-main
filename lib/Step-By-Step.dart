@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
-import 'Registers.dart';
-import 'codepage.dart';
-
-void main() {
-  runApp(StepByStep(
-    lines: [],
-    Registers: [0, 0, 0, 0, 0, 0, 0, 0],
-  ));
-}
 
 class StepByStep extends StatelessWidget {
   final List<String> lines;
   final List<int> Registers;
-  const StepByStep({Key? key, required this.lines, required this.Registers})
-      : super(key: key);
+
+  const StepByStep({
+    Key? key,
+    required this.lines,
+    required this.Registers,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +25,7 @@ class StepByStep extends StatelessWidget {
 class MIPSArchitecture extends StatefulWidget {
   final List<String> lines;
   final List<int> Registers;
+
   const MIPSArchitecture({
     Key? key,
     required this.lines,
@@ -45,7 +41,9 @@ class Instruction {
   String dist;
   String src1;
   String src2;
+
   Instruction(this.Inst, this.dist, this.src1, this.src2);
+
   String GetInstructionName() {
     return Inst;
   }
@@ -64,7 +62,331 @@ class Instruction {
 }
 
 class _MIPSArchitectureState extends State<MIPSArchitecture> {
-  Instruction Decode(String instr) {
+  int fetchIndex = 0;
+  List<int> pipelineIndices = [-1, -1, -1, -1, -1];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              for (int stage = 0; stage < 5; stage++)
+                Container(
+                  alignment: Alignment.center,
+                  width: 350,
+                  height: 80,
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        height: 20,
+                        child: Text(
+                          getStageName(stage),
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 91, 139, 243),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      
+                      buildStageContent(stage),
+                    ],
+                  ),
+                ),
+               
+              Container(
+                alignment: Alignment.center,
+                width: 350,
+                height: 80,
+                child: Row(
+                  children: [
+                    SizedBox(width: 30),
+                    for (int i = 0; i <4; i++)
+                      Container(
+                        alignment: Alignment.center,
+                        width: 72.5,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '\$t$i',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 91, 139, 243),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 4.0),
+                            Text(
+                              '${widget.Registers[i]}',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 91, 139, 243),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            
+              SizedBox(
+                width: 400,
+                height: 5,
+              ),
+              Container(
+                alignment: Alignment.center,
+                width: 350,
+                height: 80,
+                child: Row(
+                  children: [
+                    SizedBox(width: 30),
+                    for (int i = 4; i <8; i++)
+                      Container(
+                        alignment: Alignment.center,
+                        width: 72.5,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '\$t$i',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 91, 139, 243),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 4.0),
+                            Text(
+                              '${widget.Registers[i]}',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 91, 139, 243),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          try {
+            run();
+          } catch (e) {
+            print('Error: $e');
+          }
+        },
+        child: const Icon(Icons.play_arrow),
+      ),
+    );
+  }
+
+  void run() {
+  if (pipelineIndices[4] < widget.lines.length) {
+    // Move instructions through the pipeline
+    for (int i = 4; i > 0; i--) {
+      pipelineIndices[i] = pipelineIndices[i - 1];
+    }
+    pipelineIndices[0] = fetchIndex++;
+
+    setState(() {
+      print('UI updated');
+    });
+       Instruction inst = decode(widget.lines[pipelineIndices[4]]);
+    ExcuteWriteBack(inst);
+  }  
+  }
+
+
+  String getStageName(int stage) {
+    switch (stage) {
+      case 0:
+        return 'Fetch';
+      case 1:
+        return 'Decode';
+      case 2:
+        return 'Execute';
+      case 3:
+        return 'Memory';
+      case 4:
+        return 'Write Back';
+      default:
+        return '';
+    }
+  }
+
+  Widget buildStageContent(int stage) {
+    if (pipelineIndices[stage] != -1  && pipelineIndices[stage]< widget.lines.length) {
+      String currentInstruction='';
+    
+       currentInstruction = widget.lines[pipelineIndices[stage]];
+      print(pipelineIndices[stage]);
+      Instruction inst = decode(currentInstruction);
+
+      switch (stage) {
+        case 0:
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+              ),
+              
+              Text(
+                'PC= ${pipelineIndices[stage]}',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 139, 243),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Text(
+                'inst: $currentInstruction',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 139, 243),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          );
+         
+        case 1:
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'OP: ${inst.GetInstructionName()}',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 139, 243),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Dist: ${inst.GetDist()}',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 139, 243),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'src1: ${inst.GetSrc1()}',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 139, 243),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'src2: ${inst.GetSrc2()}',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 139, 243),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          );
+          
+        case 2:
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${inst.GetDist()} = ${inst.GetSrc1()} ${inst.GetInstructionName()} ${inst.GetSrc2()} ',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 139, 243),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          );
+         
+        case 3:
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'No Need To Access',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 139, 243),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          );
+         
+        case 4:
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${inst.GetDist()} = ${widget.Registers[getRegisterIndex(inst.GetDist())]}',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 139, 243),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          );
+         
+        default:
+          return Container();
+      }
+      
+    } 
+    else {
+      return Container();
+    }
+  }
+
+  Instruction decode(String instr) {
     RegExp pattern = RegExp(
         r'^(add|sub|and|slt|sll)\s*(\$t[0-7]),\s*(\$t[0-7]),\s*(\$t[0-7])$');
     Iterable<RegExpMatch> matches = pattern.allMatches(instr);
@@ -83,7 +405,6 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
 
     return Instruction(instruction, operand1, operand2, operand3);
   }
-
   void ExcuteWriteBack(Instruction inst) {
     int distindex = 0;
     int src1index = 0;
@@ -129,330 +450,12 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
       print('UI updated');
     });
   }
-
-  void Run() {
-    int numberOfInst = widget.lines.length;
-    Instruction inst = Instruction('', '', '', '');
-
-    for (int i = 0; i < numberOfInst; i++) {
-      print('${widget.lines[i]}');
-      inst = Decode(widget.lines[i]);
-      ExcuteWriteBack(inst);
+  int getRegisterIndex(String registerName) {
+  for (int i = 0; i < 8; i++) {
+    if ("\$t${i}" == registerName) {
+      return i;
     }
-    print('Run completed.');
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              alignment: Alignment.center,
-              width: 350,
-              height: 80,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 255, 255, 255),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Row(children: [
-                SizedBox(
-                  width: 15,
-                  height: 70,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: 70,
-                  height: 70,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-                SizedBox(
-                  width: 15,
-                  height: 70,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: 35,
-                  height: 70,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-                SizedBox(
-                  width: 15,
-                  height: 70,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: 70,
-                  height: 70,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-                SizedBox(
-                  width: 15,
-                  height: 70,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  width: 100,
-                  height: 35,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
-              ]),
-            ),
-            SizedBox(
-              width: 400,
-              height: 20,
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 350,
-              height: 80,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 255, 255, 255),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 400,
-              height: 20,
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 350,
-              height: 80,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 255, 255, 255),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 400,
-              height: 20,
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 350,
-              height: 80,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 255, 255, 255),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 400,
-              height: 20,
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 350,
-              height: 80,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 255, 255, 255),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 400,
-              height: 5,
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 350,
-              height: 80,
-              child: Row(children: [
-                SizedBox(
-                  width: 30,
-                ),
-                for (int i = 0; i < 4; i++)
-                  Container(
-                    alignment: Alignment.center,
-                    width: 72.5,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '\$t$i',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 91, 139, 243),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 4.0),
-                        Text(
-                          '${widget.Registers[i]}',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 91, 139, 243),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-              ]),
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 350,
-              height: 65,
-              child: Row(children: [
-                SizedBox(
-                  width: 30,
-                ),
-                for (int i = 4; i < 8; i++)
-                  Container(
-                    alignment: Alignment.center,
-                    width: 72.5,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '\$t$i',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 91, 139, 243),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 4.0),
-                        Text(
-                          '${widget.Registers[i]}',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 91, 139, 243),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-              ]),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          try {
-            Run();
-          } catch (e) {
-            print('Error: $e');
-          }
-        },
-        child: const Icon(Icons.play_arrow),
-      ),
-    );
-  }
+  return 0; // Default return, handle appropriately based on your requirements
 }
-
-class RegisterBox extends StatelessWidget {
-  final String registerName;
-  final int registerValue;
-
-  const RegisterBox({
-    Key? key,
-    required this.registerName,
-    required this.registerValue,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 6.0,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            registerName,
-            style: TextStyle(
-              color: Color.fromARGB(255, 91, 139, 243),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 4.0),
-          Text(
-            '$registerValue',
-            style: TextStyle(
-              color: Color.fromARGB(255, 91, 139, 243),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
