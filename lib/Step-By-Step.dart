@@ -507,6 +507,7 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
   }
   
 }
+//class for the instruction
 class Instruction {
   String Inst;
   String dist;
