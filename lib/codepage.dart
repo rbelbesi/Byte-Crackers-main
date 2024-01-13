@@ -134,12 +134,12 @@ void handleButtonPress() {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // Close the dialog
+                Navigator.pop(context); 
               },
               child: const Text(
                 'Back To Editor',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.green,
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
                 ),
@@ -160,6 +160,7 @@ void handleButtonPress() {
       child: Stack(
         alignment: Alignment.center,
         children: [
+     
           Align(
             alignment: Alignment.topCenter,
             child: Image.asset(
@@ -168,17 +169,20 @@ void handleButtonPress() {
               fit: BoxFit.contain,
             ),
           ),
-          Positioned(
-            bottom: 300,
-            left: 40,
-            child:Image.asset(
-              'images/image-5.png',
-              width: MediaQuery.of(context).size.width * 0.25,
-              height: MediaQuery.of(context).size.height * 0.25,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Align(
+         
+        
+          Column(
+            children: [
+              Container(
+  margin: EdgeInsets.fromLTRB(0, 0, 190, 0
+  ),
+    width: 90.0, 
+    height: 90.0, 
+    child: Image.asset('images/image-9.png'
+    ),
+  ),
+
+              Align(
             alignment: Alignment.center,
             child: SizedBox(
               width: 300,
@@ -250,8 +254,12 @@ void handleButtonPress() {
                 ),
               ),
             ),
+          ),],
           ),
+        
+          
         ],
+        
       ),
     );
   }

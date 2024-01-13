@@ -66,134 +66,147 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 91, 139, 243),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              child: Row(children: [
-                const SizedBox(height: 160),
-              ]),
+        child: 
+        Stack(
+          children:[
+             Align(
+            alignment: Alignment.topCenter,
+            child: Image.asset(
+              'images/image-3.png',
+              width: double.infinity,
+              fit: BoxFit.contain,
             ),
-            Container(
-              alignment: Alignment.center,
-              width: 265,
-              height: 80,
-              child: Row(children: [
-                const SizedBox(height: 30),
-                Text(
-                  'Complete Run',
-                  //  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 40,
+          ),
+           Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                child: Row(children: [
+                  const SizedBox(height: 160
                   ),
+                ]),
+              ),
+              Container(
+                alignment: Alignment.center,
+                width: 265,
+                height: 80,
+                child: Row(children: [
+                  const SizedBox(height: 30),
+                  Text(
+                    'Complete Run',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40,
+                    ),
+                  ),
+                ]),
+              ),
+              Container(
+                alignment: Alignment.center,
+                width: 350,
+                height: 80,
+                child: Row(
+                  children: [
+                    const SizedBox(width: 30),
+                    for (int i = 0; i < 4; i++)
+                      Container(
+                        alignment: Alignment.center,
+                        width: 72.5,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '\$t$i',
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 91, 139, 243),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              '${widget.Registers[i]}',
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 91, 139, 243),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
                 ),
-              ]),
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 350,
-              height: 80,
-              child: Row(
-                children: [
-                  const SizedBox(width: 30),
-                  for (int i = 0; i < 4; i++)
-                    Container(
-                      alignment: Alignment.center,
-                      width: 72.5,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '\$t$i',
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 91, 139, 243),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4.0),
-                          Text(
-                            '${widget.Registers[i]}',
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 91, 139, 243),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                ],
               ),
-            ),
-            const SizedBox(
-              width: 400,
-              height: 5,
-            ),
-            Container(
-              alignment: Alignment.center,
-              width: 350,
-              height: 80,
-              child: Row(
-                children: [
-                  const SizedBox(width: 30),
-                  for (int i = 4; i < 8; i++)
-                    Container(
-                      alignment: Alignment.center,
-                      width: 72.5,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '\$t$i',
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 91, 139, 243),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          const SizedBox(height: 4.0),
-                          Text(
-                            '${widget.Registers[i]}',
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 91, 139, 243),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                ],
+              const SizedBox(
+                width: 400,
+                height: 5,
               ),
-            ),
-          ],
+              Container(
+                alignment: Alignment.center,
+                width: 350,
+                height: 80,
+                child: Row(
+                  children: [
+                    const SizedBox(width: 30),
+                    for (int i = 4; i < 8; i++)
+                      Container(
+                        alignment: Alignment.center,
+                        width: 72.5,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '\$t$i',
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 91, 139, 243),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              '${widget.Registers[i]}',
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 91, 139, 243),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          ]
         ),
       ),
       floatingActionButton:
@@ -229,11 +242,10 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
     Instruction inst = Instruction('', '', '', '');
 
     for (int i = 0; i < numberOfInst; i++) {
-      print(widget.lines[i]);
       inst = decode(widget.lines[i]);
       ExcuteWriteBack(inst);
     }
-    print('Run completed.');
+
   }
 
   Instruction decode(String instr) {
@@ -273,10 +285,6 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
       }
     }
 
-    print('distindex: $distindex');
-    print('src1index: $src1index');
-    print('src2index: $src2index');
-
     if (inst.GetInstructionName() == 'add') {
       widget.Registers[distindex] =
           widget.Registers[src1index] + widget.Registers[src2index];
@@ -308,6 +316,6 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
         return i;
       }
     }
-    return 0; // Default return, handle appropriately based on your requirements
+    return 0; 
   }
 }

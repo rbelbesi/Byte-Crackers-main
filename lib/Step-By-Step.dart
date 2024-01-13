@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class StepByStep extends StatelessWidget {
+
+  //two parameters their values passed by the previous page (codepage)
   final List<String> lines;
   final List<int> Registers;
-
   const StepByStep({
     Key? key,
     required this.lines,
@@ -35,31 +36,6 @@ class MIPSArchitecture extends StatefulWidget {
   _MIPSArchitectureState createState() => _MIPSArchitectureState();
 }
 
-class Instruction {
-  String Inst;
-  String dist;
-  String src1;
-  String src2;
-
-  Instruction(this.Inst, this.dist, this.src1, this.src2);
-
-  String GetInstructionName() {
-    return Inst;
-  }
-
-  String GetDist() {
-    return dist;
-  }
-
-  String GetSrc1() {
-    return src1;
-  }
-
-  String GetSrc2() {
-    return src2;
-  }
-}
-
 class _MIPSArchitectureState extends State<MIPSArchitecture> {
   int fetchIndex = 0;
   List<int> pipelineIndices = [-1, -1, -1, -1, -1];
@@ -70,167 +46,180 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
       backgroundColor: const Color.fromARGB(255, 91, 139, 243),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                width: 265,
-                height: 80,
-                child: Row(children: [
-                  const SizedBox(width: 17),
-                  Text(
-                    'Step By Step',
-                    //  textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40,
+          child: 
+          Stack(
+            children:[
+               Align(
+            alignment: Alignment.topCenter,
+            child: Image.asset(
+              'images/image-3.png',
+              width: double.infinity,
+              fit: BoxFit.contain,
+            ),
+          ),
+           Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  width: 265,
+                  height: 80,
+                  child: Row(children: [
+                    const SizedBox(width: 17
+                    ),
+                    Text(
+                      'Step By Step',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40,
+                      ),
+                    ),
+                  ]),
+                ),
+                for (int stage = 0; stage < 5; stage++)//Build the 5 stages structure
+                  Container(
+                    alignment: Alignment.center,
+                    width: 350,
+                    height: 65,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          height: 25,
+                          child: Text(
+                            getStageName(stage),//Fetch-Decode-Excecute-Memory-WriteBack
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 91, 139, 243),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        buildStageContent(stage),//Where is every instruction
+                      ],
                     ),
                   ),
-                ]),
-              ),
-              for (int stage = 0; stage < 5; stage++)
                 Container(
                   alignment: Alignment.center,
                   width: 350,
-                  height: 65,
-                  margin: const EdgeInsets.symmetric(vertical: 5),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 255, 255),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Column(
+                  height: 80,
+                  child: Row(
                     children: [
-                      Container(
-                        alignment: Alignment.center,
-                        height: 25,
-                        child: Text(
-                          getStageName(stage),
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 91, 139, 243),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                      const SizedBox(width: 30),
+                      for (int i = 0; i < 4; i++)//build the first 4 Temporery Registers
+                        Container(
+                          alignment: Alignment.center,
+                          width: 72.5,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '\$t$i',//Register Name
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 91, 139, 243),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const SizedBox(height: 4.0),
+                              Text(
+                                '${widget.Registers[i]}',//Register value
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 91, 139, 243),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      buildStageContent(stage),
                     ],
                   ),
                 ),
-              Container(
-                alignment: Alignment.center,
-                width: 350,
-                height: 80,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 30),
-                    for (int i = 0; i < 4; i++)
-                      Container(
-                        alignment: Alignment.center,
-                        width: 72.5,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '\$t$i',
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 91, 139, 243),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              '${widget.Registers[i]}',
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 91, 139, 243),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
+                const SizedBox(
+                  width: 400,
+                  height: 5,
                 ),
-              ),
-              const SizedBox(
-                width: 400,
-                height: 5,
-              ),
-              Container(
-                alignment: Alignment.center,
-                width: 350,
-                height: 60,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 30),
-                    for (int i = 4; i < 8; i++)
-                      Container(
-                        alignment: Alignment.center,
-                        width: 72.5,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '\$t$i',
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 91, 139, 243),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                Container(
+                  alignment: Alignment.center,
+                  width: 350,
+                  height: 60,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 30),
+                      for (int i = 4; i < 8; i++)//build the rest of registers
+                        Container(
+                          alignment: Alignment.center,
+                          width: 72.5,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: const Offset(0, 3),
                               ),
-                            ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              '${widget.Registers[i]}',
-                              style: const TextStyle(
-                                color: Color.fromARGB(255, 91, 139, 243),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '\$t$i',//Register name
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 91, 139, 243),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 4.0),
+                              Text(
+                                '${widget.Registers[i]}',//Register Value
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 91, 139, 243),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
+            ]
           ),
         ),
       ),
@@ -244,9 +233,9 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
           backgroundColor: Color.fromARGB(255, 255, 193, 59),
           onPressed: () {
             try {
-              run();
+              run();//on every Run every instruction will pass to the next stage
             } catch (e) {
-              print('Error: $e');
+              print('Error: $e');//to catch any error 
             }
           },
           child: Icon(
@@ -258,7 +247,10 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
         SizedBox(
           height: 110,
         ),
-      ]),
+      ],
+      ),
+      
+    
     );
   }
 
@@ -270,12 +262,20 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
       }
       pipelineIndices[0] = fetchIndex++;
 
-      setState(() {
+      //update the UI with every new Run
+       setState(() {
         print('UI updated');
       });
-      Instruction inst = decode(widget.lines[pipelineIndices[4]]);
-      ExcuteWriteBack(inst);
     }
+    //just chaange the values of temporery registrers which
+    //involved wit the instruction in the writeback stage
+    if(pipelineIndices[4]!=-1){
+    Instruction inst = decode(widget.lines[pipelineIndices[4]]);
+    ExcuteWriteBack(inst);
+    };
+     
+    
+
   }
 
   String getStageName(int stage) {
@@ -296,14 +296,12 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
   }
 
   Widget buildStageContent(int stage) {
-    if (pipelineIndices[stage] != -1 &&
-        pipelineIndices[stage] < widget.lines.length) {
+    if (pipelineIndices[stage] != -1 && //check if stage empty
+        pipelineIndices[stage] < widget.lines.length) { //do not proceed if all instructions exected
       String currentInstruction = '';
-
-      currentInstruction = widget.lines[pipelineIndices[stage]];
-      print(pipelineIndices[stage]);
+      currentInstruction = widget.lines[pipelineIndices[stage]];//get the instruction of this stage
       Instruction inst = decode(currentInstruction);
-
+      //fill every stage with the information of its instruction
       switch (stage) {
         case 0:
           return Row(
@@ -440,7 +438,8 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
 
   Instruction decode(String instr) {
     RegExp pattern = RegExp(
-        r'^(add|sub|and|slt|sll)\s*(\$t[0-7]),\s*(\$t[0-7]),\s*(\$t[0-7])$');
+    r'^(add|sub|and|slt|sll)\s*(\$t[0-7]),\s*(\$t[0-7]),\s*(\$t[0-7])$');
+    //devide the string input instruction to multiple groups of matches dependeng on instruction class
     Iterable<RegExpMatch> matches = pattern.allMatches(instr);
 
     String instruction = '';
@@ -462,7 +461,7 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
     int distindex = 0;
     int src1index = 0;
     int src2index = 0;
-
+    //get the inedices of registers
     for (int i = 0; i < 8; i++) {
       if ("\$t$i" == inst.GetDist()) {
         distindex = i;
@@ -474,11 +473,8 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
         src2index = i;
       }
     }
-
-    print('distindex: $distindex');
-    print('src1index: $src1index');
-    print('src2index: $src2index');
-
+    
+    //applay the operation on the distenation register
     if (inst.GetInstructionName() == 'add') {
       widget.Registers[distindex] =
           widget.Registers[src1index] + widget.Registers[src2index];
@@ -499,9 +495,6 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
       widget.Registers[distindex] =
           widget.Registers[src1index] << widget.Registers[src2index];
     }
-    setState(() {
-      print('UI updated');
-    });
   }
 
   int getRegisterIndex(String registerName) {
@@ -510,6 +503,30 @@ class _MIPSArchitectureState extends State<MIPSArchitecture> {
         return i;
       }
     }
-    return 0; // Default return, handle appropriately based on your requirements
+    return 0;
+  }
+  
+}
+class Instruction {
+  String Inst;
+  String dist;
+  String src1;
+  String src2;
+  Instruction(this.Inst, this.dist, this.src1, this.src2);//constructor
+
+  String GetInstructionName() {
+    return Inst;
+  }
+
+  String GetDist() {
+    return dist;
+  }
+
+  String GetSrc1() {
+    return src1;
+  }
+
+  String GetSrc2() {
+    return src2;
   }
 }
